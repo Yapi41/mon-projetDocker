@@ -10,9 +10,11 @@ services:
       - app
 
   app:
-    build: .
+    build:
+      context: ./app
+      dockerfile: Dockerfile
     volumes:
-      - .:/app
+      - ./app:/app
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
     depends_on:
@@ -21,9 +23,9 @@ services:
   db:
     image: postgres:15
     environment:
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - db_data:/var/lib/postgresql/data
 
