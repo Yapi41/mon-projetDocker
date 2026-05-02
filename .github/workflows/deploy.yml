@@ -21,8 +21,15 @@ jobs:
             # 1. Aller dans le dossier du projet
             cd /home/test_user/projet_test1
             
-            # 2. Mettre à jour le code
-            git pull origin main
+            # 2. Si le dossier est vide, on clone. Sinon, on pull.
+            if [ ! -d ".git" ]; then
+              echo "Premier déploiement : Clonage du dépôt..."
+              git clone https://github.com/Yapi41/mon-projetDocker.git .
+            else
+              echo "Mise à jour du code..."
+              git pull origin main
+            fi
+
             
             # 3. Recréer le fichier .env sur le serveur AWS
             echo "DB_USER=${{ secrets.DB_USER }}" > .env
