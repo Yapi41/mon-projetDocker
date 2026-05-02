@@ -23,21 +23,23 @@ jobs:
             mkdir -p /home/${{ secrets.EC2_USER }}/projet_test1
             cd /home/${{ secrets.EC2_USER }}/projet_test1
             
-            # 2. Gestion du Git (Note le "." à la fin du clone)
+            # 2. Sécurité : Si le dossier existe mais n'est pas un dépôt Git, on nettoie tout
+            if [ -d "mon-projetDocker" ]; then rm -rf mon-projetDocker; fi # Supprime l'ancien dossier raté
+            
             if [ ! -d ".git" ]; then
-              echo "Premier déploiement..."
+              echo "Nettoyage et clonage tout neuf..."
+              # On vide le dossier actuel pour éviter l'erreur 'not empty'
+              find . -mindepth 1 -delete 
               git clone https://github.com/Yapi41/mon-projetDocker.git .
             else
-              echo "Mise à jour..."
+              echo "Mise à jour du code..."
               git pull origin main
             fi
             
-            # 3. Fichier .env
+            # 3. Créer le fichier .env (Indispensable AVANT docker compose)
             echo "DB_USER=${{ secrets.DB_USER }}" > .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
             echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
             
-            # 4. Relancer les conteneurs
-            # On teste 'docker compose' (version moderne)
             sudo docker compose down
             sudo docker compose up -d --build
