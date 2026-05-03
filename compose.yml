@@ -1,11 +1,15 @@
 services:
   nginx:
-    image: nginx:latest
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '81:81'
+      - '443:443'
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
       - ./static:/usr/share/nginx/html
     depends_on:
       - app
