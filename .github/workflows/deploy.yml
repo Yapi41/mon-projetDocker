@@ -24,7 +24,8 @@ jobs:
             cd /home/${{ secrets.EC2_USER }}/projet_test1
             
             # 2. Sécurité : Si le dossier existe mais n'est pas un dépôt Git, on nettoie tout
-            if [ -d "mon-projetDocker" ]; then rm -rf mon-projetDocker; fi # Supprime l'ancien dossier raté
+            # Supprime l'ancien dossier raté
+            if [ -d "mon-projetDocker" ]; then rm -rf mon-projetDocker; fi
             
             if [ ! -d ".git" ]; then
               echo "Nettoyage et clonage tout neuf..."
@@ -36,7 +37,7 @@ jobs:
               git pull origin main
             fi
             
-            # 3. Créer le fichier .env (Indispensable AVANT docker compose)
+            # 3. Créer le fichier .env
             echo "DB_USER=${{ secrets.DB_USER }}" > .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
             echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
