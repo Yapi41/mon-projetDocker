@@ -22,6 +22,7 @@ jobs:
             # 1. Aller dans le dossier
             mkdir -p /home/${{ secrets.EC2_USER }}/projet_test1
             cd /home/${{ secrets.EC2_USER }}/projet_test1
+            sudo chown -R ${{ secrets.EC2_USER }}:${{ secrets.EC2_USER }} .
             
             # 2. Sécurité : Si le dossier existe mais n'est pas un dépôt Git, on nettoie tout
             # Supprime l'ancien dossier raté
